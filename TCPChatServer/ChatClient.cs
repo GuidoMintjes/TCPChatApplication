@@ -35,7 +35,7 @@ namespace TCPChatServer {
 
             public void Connect(TcpClient _socket) {
 
-                Console.WriteLine("Trying to connect to server...");
+                //Console.WriteLine("Trying to connect to server...");
 
                 socket = _socket;
 

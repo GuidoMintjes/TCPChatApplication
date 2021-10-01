@@ -8,7 +8,7 @@ namespace TCPChatServer {
     class ChatServer {
 
 
-        public static int MaxConnections { get; private set; }
+        public static int MaxConnections;
         public static int Port { get; private set; }
 
 
@@ -25,7 +25,7 @@ namespace TCPChatServer {
         public static void StartServer(int maxConnections, int port) {
 
             Console.WriteLine("Starting server...");
-            InitialiseServerData();
+            InitialiseServerData(maxConnections);
 
             MaxConnections = maxConnections;
             Port = port;
@@ -37,7 +37,6 @@ namespace TCPChatServer {
             tcpListener.BeginAcceptTcpClient(new AsyncCallback(ServerConnectCallback), null);
 
             Console.WriteLine("Server initialized on port: " + Port);
-
         }
 
         // Handle connection once it has been established
@@ -52,7 +51,7 @@ namespace TCPChatServer {
             Console.WriteLine("Someone is trying to connect from: " + client.Client.RemoteEndPoint + 
                                                         "  (INCOMING CONNECTION MESSAGE)");
 
-
+            
             for (int i = 1; i <= MaxConnections; i++) {
 
                 // Check if socket of this id in the dictionary is null, that would mean it is vacant
@@ -70,9 +69,12 @@ namespace TCPChatServer {
 
 
         // Initialise our connections dictionary
-        private static void InitialiseServerData() {
+        private static void InitialiseServerData(int maxConnections) {
 
-            for (int i = 1; i <= MaxConnections; i++) {
+            Console.WriteLine(maxConnections);
+
+            for (int i = 1; i <= maxConnections; i++) {
+
                 connections.Add(i, new ChatClient(i));
             }
         }
