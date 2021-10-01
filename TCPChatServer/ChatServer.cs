@@ -10,6 +10,7 @@ namespace TCPChatServer {
 
         public static int MaxConnections;
         public static int Port { get; private set; }
+        public static string ipAddress;
 
 
 
@@ -70,8 +71,6 @@ namespace TCPChatServer {
 
         // Initialise our connections dictionary
         private static void InitialiseServerData(int maxConnections) {
-
-            Console.WriteLine(maxConnections);
 
             for (int i = 1; i <= maxConnections; i++) {
 
