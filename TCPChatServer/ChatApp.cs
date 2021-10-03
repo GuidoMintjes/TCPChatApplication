@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using TCPChatServer;
 
 namespace TCPChatServer {
     class ChatApp {
