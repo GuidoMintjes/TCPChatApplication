@@ -14,6 +14,7 @@ namespace TCPChatServer {
 
             string[] INFOS = INFO.Split(';');
 
+
             try {
                 maxConnectionsStart = Convert.ToInt32(INFOS[0]);
                 portStart = Convert.ToInt32(INFOS[1]);
