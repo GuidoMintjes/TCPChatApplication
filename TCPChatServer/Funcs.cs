@@ -39,7 +39,7 @@ namespace TCPChatServer {
                 Console.Write(character);
                 System.Threading.Thread.Sleep(delay);
             }
-            Console.WriteLine("\n");
+            Console.Write("\n");
         }
     }
 }

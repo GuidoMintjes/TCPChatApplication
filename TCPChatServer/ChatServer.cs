@@ -49,8 +49,7 @@ namespace TCPChatServer {
                                                                                                 // again, otherwise the tcplistener would stop
                                                                                                 // listening and no other connections could be made
 
-            Funcs.printMessage(2, "Someone is trying to connect from: " + client.Client.RemoteEndPoint + 
-                                                        "  (INCOMING CONNECTION MESSAGE)", true);
+            Funcs.printMessage(2, "Someone is trying to connect from: " + client.Client.RemoteEndPoint, true);
 
             
             for (int i = 1; i <= MaxConnections; i++) {
