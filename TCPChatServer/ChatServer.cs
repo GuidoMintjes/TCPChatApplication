@@ -25,7 +25,7 @@ namespace TCPChatServer {
         // Initialize the server
         public static void StartServer(int maxConnections, int port) {
 
-            Console.WriteLine("Starting server...");
+            Funcs.printMessage(2, "Starting server...", true);
             InitialiseServerData(maxConnections);
 
             MaxConnections = maxConnections;
@@ -37,7 +37,7 @@ namespace TCPChatServer {
             tcpListener.Start();
             tcpListener.BeginAcceptTcpClient(new AsyncCallback(ServerConnectCallback), null);
 
-            Console.WriteLine("Server initialized on port: " + Port);
+            Funcs.printMessage(2, "Server initialized on port: " + Port, true);
         }
 
         // Handle connection once it has been established
@@ -49,8 +49,8 @@ namespace TCPChatServer {
                                                                                                 // again, otherwise the tcplistener would stop
                                                                                                 // listening and no other connections could be made
 
-            Console.WriteLine("Someone is trying to connect from: " + client.Client.RemoteEndPoint + 
-                                                        "  (INCOMING CONNECTION MESSAGE)");
+            Funcs.printMessage(2, "Someone is trying to connect from: " + client.Client.RemoteEndPoint + 
+                                                        "  (INCOMING CONNECTION MESSAGE)", true);
 
             
             for (int i = 1; i <= MaxConnections; i++) {
@@ -64,8 +64,8 @@ namespace TCPChatServer {
             }
 
 
-            Console.WriteLine(client.Client.RemoteEndPoint + " has failed to connect to server because the server is full. " +
-                                " (SERVER FULL ERROR)");
+            Funcs.printMessage(2, client.Client.RemoteEndPoint + " has failed to connect to server because the server is full. " +
+                                " (SERVER FULL ERROR)", true);
         }
 
 

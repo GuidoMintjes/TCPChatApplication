@@ -20,7 +20,7 @@ namespace TCPChatServer {
                 portStart = Convert.ToInt32(INFOS[1]);
             } catch {
 
-                Console.WriteLine("File (SERVER_INFO.txt) contents broken!");
+                Funcs.printMessage(0, "File (SERVER_INFO.txt) contents broken!", false);
                 Console.ReadLine();
                 Environment.Exit(0);
             }
