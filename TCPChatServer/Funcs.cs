@@ -14,17 +14,17 @@ namespace TCPChatServer {
 
             switch (alertLevel) {
                 case 0:
-                    string msgErr = errorAlert + "{" + DateTime.Now.TimeOfDay + "} " + message;
+                    string msgErr = errorAlert + "{" + DateTime.Now.ToString("HH:mm:ss") + "} " + message;
                     slowType(msgErr, 3);
                     break;
 
                 case 1:
-                    string msgWarn = warningAlert + "{" + DateTime.Now.TimeOfDay + "} " + message;
+                    string msgWarn = warningAlert + "{" + DateTime.Now.ToString("HH:mm:ss") + "} " + message;
                     slowType(msgWarn, 3);
                     break;
 
                 case 2:
-                    string msgMsg = messageAlert + "{" + DateTime.Now.TimeOfDay + "} " + message;
+                    string msgMsg = messageAlert + "{" + DateTime.Now.ToString("HH:mm:ss") + "} " + message;
                     slowType(msgMsg, 3);
                     break;
 
