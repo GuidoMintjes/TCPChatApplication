@@ -220,7 +220,7 @@ namespace TCPChatServer {
 
         public void Dispose() {
 
-            NullifyPacket();
+            NullifyPacket(true);
             GC.SuppressFinalize(this);
         }
     }
