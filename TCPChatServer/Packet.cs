@@ -88,11 +88,22 @@ namespace TCPChatServer {
 
 
         // Empty this instance of a packet so it can be used again
-        public void NullifyPacket() {
+        public void NullifyPacket(bool reset) {
 
-            buffer.Clear();     // Clear the datastream
-            readPointer = 0;    // Reset the data pointer
-            byteArray = null;   // Clear the readable bytearray
+            if (reset) {
+                buffer.Clear();     // Clear the datastream
+                readPointer = 0;    // Reset the data pointer
+                byteArray = null;   // Clear the readable bytearray
+
+            } else {
+                readPointer -= 4;   // Unread last read integer when not nullifying/resetting
+            }
+        }
+
+
+        // Write the length of the packet into the packet, this is need for properly receiving it
+        public void PacketWriteLength() {
+            buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count));
         }
 
 

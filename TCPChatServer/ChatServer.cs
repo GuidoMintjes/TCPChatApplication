@@ -40,6 +40,7 @@ namespace TCPChatServer {
             Funcs.printMessage(2, "Server initialized on port: " + Port, true);
         }
 
+
         // Handle connection once it has been established
         private static void ServerConnectCallback(IAsyncResult aResult) {
 

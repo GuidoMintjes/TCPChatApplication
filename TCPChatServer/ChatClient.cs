@@ -46,6 +46,27 @@ namespace TCPChatServer {
                 receiveByteArray = new byte[dataBufferSize];
 
                 stream.BeginRead(receiveByteArray, 0, dataBufferSize, StreamReceiveCallback, null);
+
+
+                TCPSend.WelcomeClient(id, $"Welcome to this secure channel! " +
+                    $"My time is currently {DateTime.Now.ToString("HH:mm:ss")}!");  // Send welcome message
+            }
+
+
+            // Send data to client through TCP
+            public void SendData(Packet packet) {
+
+                try {
+
+                    if (socket != null) {
+
+                        stream.BeginWrite(packet.GetPacketBytes(), 0, packet.GetPacketSize(), null, null);
+                    }
+
+            } catch (Exception exc) {
+
+                    Funcs.printMessage(0, $"Unable to send data to client {id} through TCP, err msg: {exc}", false);
+                }
             }
 
 
