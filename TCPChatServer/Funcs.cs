@@ -9,43 +9,74 @@ namespace TCPChatServer {
         private static string warningAlert = "[WARNING] ";
         private static string messageAlert = "[MSG] ";
 
+        private static bool allowTypeWrite = false;
 
         public static void printMessage(int alertLevel, string message, bool typeWrite) {
 
-            switch (alertLevel) {
-                case 0:
+            if (allowTypeWrite) {
+                switch (alertLevel) {
+                    case 0:
 
-                    string msgErr = errorAlert + "{" + DateTime.Now.ToString("HH:mm:ss") + "} " + message;
+                        string msgErr = errorAlert + "{" + DateTime.Now.ToString("HH:mm:ss") + "} " + message;
 
-                    if (typeWrite)
-                        slowType(msgErr, 3);
-                    else
+                        if (typeWrite)
+                            slowType(msgErr, 3);
+                        else
+                            Console.WriteLine(msgErr);
+
+                        break;
+
+                    case 1:
+                        string msgWarn = warningAlert + "{" + DateTime.Now.ToString("HH:mm:ss") + "} " + message;
+
+                        if (typeWrite)
+                            slowType(msgWarn, 3);
+                        else
+                            Console.WriteLine(msgWarn);
+
+                        break;
+
+                    case 2:
+                        string msgMsg = messageAlert + "{" + DateTime.Now.ToString("HH:mm:ss") + "} " + message;
+
+                        if (typeWrite)
+                            slowType(msgMsg, 3);
+                        else
+                            Console.WriteLine(msgMsg);
+
+                        break;
+
+                    default:
+                        break;
+                }
+            } else {
+
+                switch (alertLevel) {
+                    case 0:
+
+                        string msgErr = errorAlert + "{" + DateTime.Now.ToString("HH:mm:ss") + "} " + message;
+
                         Console.WriteLine(msgErr);
 
-                    break;
+                        break;
 
-                case 1:
-                    string msgWarn = warningAlert + "{" + DateTime.Now.ToString("HH:mm:ss") + "} " + message;
+                    case 1:
+                        string msgWarn = warningAlert + "{" + DateTime.Now.ToString("HH:mm:ss") + "} " + message;
 
-                    if (typeWrite)
-                        slowType(msgWarn, 3);
-                    else
                         Console.WriteLine(msgWarn);
 
-                    break;
+                        break;
 
-                case 2:
-                    string msgMsg = messageAlert + "{" + DateTime.Now.ToString("HH:mm:ss") + "} " + message;
+                    case 2:
+                        string msgMsg = messageAlert + "{" + DateTime.Now.ToString("HH:mm:ss") + "} " + message;
 
-                    if (typeWrite)
-                        slowType(msgMsg, 3);
-                    else
                         Console.WriteLine(msgMsg);
 
-                    break;
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
             }
         }
 
