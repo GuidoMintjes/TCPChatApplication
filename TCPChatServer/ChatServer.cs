@@ -10,7 +10,7 @@ namespace TCPChatServer {
 
         public static int MaxConnections;
         public static int Port { get; private set; }
-        public static string ipAddress;
+
 
 
 
@@ -20,13 +20,18 @@ namespace TCPChatServer {
 
         // Keep a dictionary of all connections
         public static Dictionary<int, ChatClient> connections = new Dictionary<int, ChatClient>();
-        
+
+
+        // Same dictionary and void as the client
+        public delegate void PacketHandler(int clientID, Packet packet);
+        public static Dictionary<int, PacketHandler> packetHandlers;
+
 
         // Initialize the server
         public static void StartServer(int maxConnections, int port) {
 
             Funcs.printMessage(2, "Starting server...", true);
-            InitialiseServerData(maxConnections);
+            InitializeServerData(maxConnections);
 
             MaxConnections = maxConnections;
             Port = port;
@@ -70,12 +75,22 @@ namespace TCPChatServer {
 
 
         // Initialise our connections dictionary
-        private static void InitialiseServerData(int maxConnections) {
+        private static void InitializeServerData(int maxConnections) {
 
             for (int i = 1; i <= maxConnections; i++) {
 
                 connections.Add(i, new ChatClient(i));
             }
+
+
+            // Initialize the dictionary of packet handlers
+            packetHandlers = new Dictionary<int, PacketHandler>() {
+
+                { (int)ClientPackets.welcomeReceived, TCPServerHandle.ReturnedWelcomeReceived }
+            };
+
+
+            Funcs.printMessage(2, "Packet handler dictionary initiated!", true);
         }
     }
 }

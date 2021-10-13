@@ -196,11 +196,12 @@ namespace TCPChatServer {
 
 
         // Reads a string in the datastream
-        public string PacketReadString(int stringSize, bool moveDataPointer) {
+        public string PacketReadString(bool moveDataPointer) {
 
             if (buffer.Count > readPointer) {
 
-                string stringRead = BitConverter.ToString(byteArray, readPointer, stringSize);
+                int stringSize = PacketReadInt(true);
+                string stringRead = Encoding.ASCII.GetString(byteArray, readPointer, stringSize);
                 if (moveDataPointer)
                     readPointer += stringSize;
 

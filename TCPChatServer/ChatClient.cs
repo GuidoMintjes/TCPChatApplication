@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 namespace TCPChatServer {
 
@@ -21,10 +24,13 @@ namespace TCPChatServer {
         public class TCP {
 
             public TcpClient socket;    // Information stored that gets saved in server in the callback method
-            private readonly int id;
+            private int id;
 
             private NetworkStream stream;
             private byte[] receiveByteArray;
+
+            private Packet receivedPacket;
+
 
 
             public TCP(int _id) {
@@ -45,10 +51,12 @@ namespace TCPChatServer {
                 stream = socket.GetStream();                    // Gets the 'stream' of info provided by the socket
                 receiveByteArray = new byte[dataBufferSize];
 
+                receivedPacket = new Packet();
+
                 stream.BeginRead(receiveByteArray, 0, dataBufferSize, StreamReceiveCallback, null);
 
 
-                TCPSend.WelcomeClient(id, $"Welcome to this secure channel! " +
+                TCPServerSend.WelcomeClient(id, $"Welcome to this secure channel! " +
                     $"My time is currently {DateTime.Now.ToString("HH:mm:ss")}!");  // Send welcome message
             }
 
@@ -63,7 +71,7 @@ namespace TCPChatServer {
                         stream.BeginWrite(packet.GetPacketBytes(), 0, packet.GetPacketSize(), null, null);
                     }
 
-            } catch (Exception exc) {
+                } catch (Exception exc) {
 
                     Funcs.printMessage(0, $"Unable to send data to client {id} through TCP, err msg: {exc}", false);
                 }
@@ -88,6 +96,7 @@ namespace TCPChatServer {
                     byte[] dataReceived = new byte[dataLength];             // Move the received data to a local variable...
                     Array.Copy(receiveByteArray, dataReceived, dataLength); // ...
 
+                    receivedPacket.NullifyPacket(HandleData(dataReceived));
 
                     // Start reading data from the stream again (if this would not be done the client would stop functioning
                     // here pretty much, just like if the server would stop listening for new connections)
@@ -98,6 +107,72 @@ namespace TCPChatServer {
 
                     Console.WriteLine("Disconnected due to error: " + exc.Message);
                 }
+            }
+
+
+            // Handles the data and returns a boolean, this is needed because we might not want to always reset the pack
+            private bool HandleData(byte[] dataArray) {
+
+                int packetLength = 0;
+
+                receivedPacket.SetPacketBytes(dataArray); // Load the data into the Packet instance
+
+
+                // Check if what still needs to be read is an integer or bigger, if so that is the first int of the packet indicating
+                // the length of that packet
+                if (receivedPacket.GetUnreadPacketSize() >= 4) {
+
+                    packetLength = receivedPacket.PacketReadInt(true);
+
+                    // Check if packet size is 0 or less, if so, return true so that the packet will be reset
+                    if (packetLength <= 0) {
+
+                        return true;
+                    }
+                }
+
+
+                // While this is true there is still data that needs to be handled
+                while (packetLength > 0 && packetLength <= receivedPacket.GetUnreadPacketSize()) {
+
+                    byte[] packetBytes = receivedPacket.PacketReadBytes(packetLength, true);
+
+                    ThreadManager.ExecuteOnMainThread(() => {
+
+                        using (Packet packet = new Packet(packetBytes)) {
+
+                            int packetID = packet.PacketReadInt(true);
+
+                            
+                            ChatServer.packetHandlers[packetID](id, packet);
+
+
+                            Funcs.printMessage(2, "Added to packet handlers", true);
+                        }
+                    });
+
+                    packetLength = 0;
+
+                    if (receivedPacket.GetUnreadPacketSize() >= 4) {
+
+                        packetLength = receivedPacket.PacketReadInt(true);
+
+                        // Check if packet size is 0 or less, if so, return true so that the packet will be reset
+                        if (packetLength <= 0) {
+
+                            return true;
+                        }
+                    }
+                }
+
+
+                if (packetLength <= 1) {
+                    return true;
+                }
+
+
+                return false;       // In this case there is still a piece of data in the packet/stream which is part of some data
+                                    // in some other upcoming packet, which is why it shouldn't be destroyed
             }
         }
     }

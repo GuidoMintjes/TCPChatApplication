@@ -1,9 +1,12 @@
 ﻿using System;
 using System.IO;
 using TCPChatServer;
+using System.Threading;
 
 namespace TCPChatServer {
     class ChatApp {
+
+        private static bool isRunning = false;
 
         static void Main(string[] args) {
 
@@ -25,10 +28,38 @@ namespace TCPChatServer {
                 Environment.Exit(0);
             }
 
+            ThreadManager.UpdateMain();
+
+            isRunning = true;           // Set running status to be active
+
+            Thread mainThread = new Thread(new ThreadStart(MainThread));
+            mainThread.Start();
 
             ChatServer.StartServer(maxConnectionsStart, portStart);
+        }
 
-            Console.Read();
+
+        // Run the logic loop
+        private static void MainThread() {
+
+            Funcs.printMessage(1, $"Main thread with loop started at {Consts.TICKMSDURATION} ms per tick!", false);
+            DateTime nextCycle = DateTime.Now;
+
+            while(isRunning) {
+
+                while(nextCycle < DateTime.Now) {
+                    
+                    Logic.Update();
+
+                    nextCycle = nextCycle.AddMilliseconds(Consts.TICKMSDURATION);
+
+                    // Fix voor hoge CPU usage
+                    if(nextCycle > DateTime.Now) {
+
+                        Thread.Sleep(nextCycle - DateTime.Now);
+                    }
+                }
+            }
         }
     }
 }

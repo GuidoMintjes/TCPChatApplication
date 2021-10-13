@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
+
 
 namespace TCPChatServer {
     public static class Funcs {
@@ -8,6 +7,7 @@ namespace TCPChatServer {
         private static string errorAlert = "[ERROR] ";
         private static string warningAlert = "[WARNING] ";
         private static string messageAlert = "[MSG] ";
+        private static string serverAlert = "[SERVER] ";
 
         private static bool allowTypeWrite = false;
 
@@ -46,6 +46,16 @@ namespace TCPChatServer {
 
                         break;
 
+                    case 3:
+                        string msgServer = serverAlert + "{" + DateTime.Now.ToString("HH:mm:ss") + "} " + message;
+
+                        if (typeWrite)
+                            slowType(msgServer, 3);
+                        else
+                            Console.WriteLine(msgServer);
+
+                        break;
+
                     default:
                         break;
                 }
@@ -71,6 +81,13 @@ namespace TCPChatServer {
                         string msgMsg = messageAlert + "{" + DateTime.Now.ToString("HH:mm:ss") + "} " + message;
 
                         Console.WriteLine(msgMsg);
+
+                        break;
+
+                    case 3:
+                        string msgServer = serverAlert + "{" + DateTime.Now.ToString("HH:mm:ss") + "} " + message;
+
+                        Console.WriteLine(msgServer);
 
                         break;
 
