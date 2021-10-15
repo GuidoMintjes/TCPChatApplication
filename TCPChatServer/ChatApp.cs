@@ -10,6 +10,14 @@ namespace TCPChatServer {
 
         static void Main(string[] args) {
 
+            Console.Write(@"                            Welcome to the server program!
+                            
+                            Press enter to use commands!
+                                - 'say' to send a message to all clients
+
+
+                            " + "\n");
+
             Console.Title = "TCP Chat Server Demo";
             int maxConnectionsStart = 10, portStart = 0;
 

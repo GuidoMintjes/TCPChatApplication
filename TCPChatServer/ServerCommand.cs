@@ -17,8 +17,10 @@ namespace TCPChatServer {
                     ConsoleKeyInfo key = Console.ReadKey(true);
                     switch (key.Key) {
                         case ConsoleKey.Enter:
-                            Console.WriteLine("Input command:");
+                            Console.WriteLine();
+                            Funcs.printMessage(3, "Input command:", false);
                             commandRaw = Console.ReadLine();
+                            Console.WriteLine();
 
                             SendCommand(commandRaw);
                             break;
@@ -32,18 +34,18 @@ namespace TCPChatServer {
 
         private static void SendCommand(string commandRaw) {
 
-            string command, argument;
+            string command = "", argument = "";
 
             if (!String.IsNullOrEmpty(commandRaw)) {
-                if (commandRaw[0] == '/') {
-
-                    commandRaw = commandRaw.Substring(1);
 
                     string[] commandsRaw = commandRaw.Split(" ");
 
+                try {
                     command = commandsRaw[0];
                     argument = commandsRaw[1];
-
+                } catch {
+                    Funcs.printMessage(1, "Command not formatted right!", false);
+                }
 
                     switch (command) {
 
@@ -60,10 +62,8 @@ namespace TCPChatServer {
                     }
 
                     reading = false;
-                } else {
 
                     CommandLoop();
-                }
             }
         }
 
@@ -75,7 +75,6 @@ namespace TCPChatServer {
             Packet packet = new Packet((int)ServerPackets.message);
 
             packet.PacketWrite(message);
-            CommandLoop();
 
             return packet;
         }

@@ -13,7 +13,8 @@ namespace TCPChatServer {
 
     // Packet sent from client to server, in this case confirming the welcome message
     public enum ClientPackets {
-        welcomeReceived = 1
+        welcomeReceived = 1,
+        messageReceived = 2
     }
 
 

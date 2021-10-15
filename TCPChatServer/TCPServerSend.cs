@@ -38,7 +38,6 @@ namespace TCPChatServer {
 
 
             Funcs.printMessage(2, "Packet sent to all", false);
-            //ServerCommand.reading = false;
         }
 
 
