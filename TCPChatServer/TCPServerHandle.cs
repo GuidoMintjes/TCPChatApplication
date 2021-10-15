@@ -13,6 +13,8 @@ namespace TCPChatServer {
 
             Funcs.printMessage(3, $"{ChatServer.connections[clientID].tcp.socket.Client.RemoteEndPoint} connected to this server!"
                 + $" (ID {clientID} with name {receivedUserName})", true);
+            
+            
 
             if(clientID != receivedClientID) {
 
@@ -21,8 +23,6 @@ namespace TCPChatServer {
                 Console.WriteLine();
             }
 
-
-            ServerCommand.CommandLoop();
         }
     }
 }

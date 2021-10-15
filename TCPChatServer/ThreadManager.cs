@@ -5,6 +5,10 @@ using System.Collections.Generic;
 namespace TCPChatServer {
     class ThreadManager {
 
+
+        public static bool serverStarted = false;
+
+
         // An action is kind of like a thread, but it needs to be placed on a thread, in this case we only have the main thread
         private static readonly List<Action> executeOnMainThread = new List<Action>();
         private static readonly List<Action> executeCopiedOnMainThread = new List<Action>();
@@ -48,6 +52,9 @@ namespace TCPChatServer {
                     executeCopiedOnMainThread[i]();
                 }
             }
+
+            if (serverStarted)
+                ServerCommand.CommandLoop();
         }
     }
 }

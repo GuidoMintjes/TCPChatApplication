@@ -5,6 +5,7 @@ using System.Text;
 namespace TCPChatServer {
     class TCPServerSend {
 
+
         // Send a nice welcoming message to a client that just connected
         public static void WelcomeClient(int clientID, string welcomeMessage) {
 
@@ -32,6 +33,8 @@ namespace TCPChatServer {
             for (int i = 1; i < ChatServer.MaxConnections; i++) {
 
                 ChatServer.connections[i].tcp.SendData(packet);
+
+                Funcs.printMessage(2, "Packet sent to all", false);
             }
         }
 
