@@ -29,7 +29,7 @@ namespace TCPChatServer {
 
             string message = packet.PacketReadString(true);
 
-            TCPServerSend.TCPSendPacketToAll(clientID, packet);
+            TCPServerSend.TCPSendPacketToAll(packet);
         }
     }
 }
