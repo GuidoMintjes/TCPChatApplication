@@ -7,6 +7,8 @@ namespace TCPChatServer {
 
         public static void CommandLoop() {
 
+            Console.WriteLine("ADASD");
+
             string commandRaw = Console.ReadLine();
             string command, argument;
 
