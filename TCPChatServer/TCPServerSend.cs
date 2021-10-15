@@ -34,8 +34,11 @@ namespace TCPChatServer {
 
                 ChatServer.connections[i].tcp.SendData(packet);
 
-                Funcs.printMessage(2, "Packet sent to all", false);
             }
+
+
+            Funcs.printMessage(2, "Packet sent to all", false);
+            //ServerCommand.reading = false;
         }
 
 

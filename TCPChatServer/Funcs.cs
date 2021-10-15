@@ -1,5 +1,5 @@
 ﻿using System;
-
+using System.Threading;
 
 namespace TCPChatServer {
     public static class Funcs {
@@ -12,6 +12,22 @@ namespace TCPChatServer {
         private static bool allowTypeWrite = false;
 
         public static void printMessage(int alertLevel, string message, bool typeWrite) {
+
+            if (ServerCommand.reading) {
+
+                Thread T1 = new Thread(() => printer(alertLevel, message, typeWrite));
+
+                T1.Start();
+
+            } else {
+
+                printer(alertLevel, message, typeWrite);
+            }
+        }
+
+
+        private static void printer(int alertLevel, string message, bool typeWrite) {
+
 
             if (allowTypeWrite) {
                 switch (alertLevel) {
@@ -96,6 +112,7 @@ namespace TCPChatServer {
                 }
             }
         }
+
 
 
         public static void slowType(string message, int delay) {
