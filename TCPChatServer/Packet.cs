@@ -7,14 +7,16 @@ namespace TCPChatServer {
     // Packet sent from server to client, in this case only a welcome message
     public enum ServerPackets {
         welcome = 1,
-        message = 2
+        message = 2,
+        chat = 3
     }
 
 
     // Packet sent from client to server, in this case confirming the welcome message
     public enum ClientPackets {
         welcomeReceived = 1,
-        messageReceived = 2
+        messageReceived = 2,
+        chatReceived = 3
     }
 
 
@@ -203,6 +205,9 @@ namespace TCPChatServer {
             if (buffer.Count > readPointer) {
 
                 int stringSize = PacketReadInt(true);
+
+                Console.Write(buffer.Count);
+
                 string stringRead = Encoding.ASCII.GetString(byteArray, readPointer, stringSize);
                 if (moveDataPointer)
                     readPointer += stringSize;

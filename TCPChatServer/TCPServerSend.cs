@@ -42,7 +42,7 @@ namespace TCPChatServer {
 
 
         // Send a packet to all connected clients except one
-        private static void TCPSendPacketToAll(int excludedClient, Packet packet) {
+        public static void TCPSendPacketToAll(int excludedClient, Packet packet) {
 
             packet.PacketWriteLength();
             for (int i = 1; i < ChatServer.MaxConnections; i++) {

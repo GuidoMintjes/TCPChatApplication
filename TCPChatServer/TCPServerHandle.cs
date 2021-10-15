@@ -22,7 +22,14 @@ namespace TCPChatServer {
                 Funcs.printMessage(0, $"Client {receivedUserName} with ID {clientID} has the wrong ID: {receivedClientID}!", false);
                 Console.WriteLine();
             }
+        }
 
+
+        public static void PassChatMessage(int clientID, Packet packet) {
+
+            string message = packet.PacketReadString(true);
+
+            TCPServerSend.TCPSendPacketToAll(clientID, packet);
         }
     }
 }
