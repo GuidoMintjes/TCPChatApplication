@@ -26,7 +26,7 @@ namespace TCPChatServer {
 
 
         // Send a packet to all connected clients
-        private static void TCPSendPacketToAll(Packet packet) {
+        public static void TCPSendPacketToAll(Packet packet) {
 
             packet.PacketWriteLength();
             for (int i = 1; i < ChatServer.MaxConnections; i++) {

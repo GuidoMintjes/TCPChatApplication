@@ -22,8 +22,7 @@ namespace TCPChatServer {
             }
 
 
-            // TODO:    Start loop that checks for messages that are sent, then need to be sent to other clients except the one
-            //          who sent it
+            ServerCommand.CommandLoop();
         }
     }
 }

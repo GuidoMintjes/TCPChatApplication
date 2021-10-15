@@ -6,7 +6,8 @@ namespace TCPChatServer {
 
     // Packet sent from server to client, in this case only a welcome message
     public enum ServerPackets {
-        welcome = 1
+        welcome = 1,
+        message = 2
     }
 
 
