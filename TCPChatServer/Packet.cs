@@ -137,7 +137,7 @@ namespace TCPChatServer {
             PacketWrite(_stringValue.Length);   // A string isn't always the same size, which is why the length of the string
                                                 // has to be added to the datastream, so the other end knows how long to read
                                                 // keep reading for just the string, an integer is always 4 bytes
-            buffer.AddRange(Encoding.ASCII.GetBytes(_stringValue)); // Add to the packet/datastream the string itself
+            buffer.AddRange(Encoding.Unicode.GetBytes(_stringValue)); // Add to the packet/datastream the string itself
         }
 
         #endregion
@@ -208,7 +208,7 @@ namespace TCPChatServer {
 
                 Console.Write(buffer.Count);
 
-                string stringRead = Encoding.ASCII.GetString(byteArray, readPointer, stringSize);
+                string stringRead = Encoding.Unicode.GetString(byteArray, readPointer, stringSize);
                 if (moveDataPointer)
                     readPointer += stringSize;
 
