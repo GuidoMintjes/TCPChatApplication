@@ -134,9 +134,12 @@ namespace TCPChatServer {
         // Add a string to the packet/datastream
         public void PacketWrite(string _stringValue) {
 
-            PacketWrite(_stringValue.Length);   // A string isn't always the same size, which is why the length of the string
-                                                // has to be added to the datastream, so the other end knows how long to read
-                                                // keep reading for just the string, an integer is always 4 bytes
+            int a = Encoding.Unicode.GetByteCount(_stringValue);   // A string isn't always the same size, which is why the length of the string
+                                                                   // has to be added to the datastream, so the other end knows how long to read
+                                                                   // keep reading for just the string, an integer is always 4 bytes
+            PacketWrite(a);
+            PacketWrite(a);
+            
             buffer.AddRange(Encoding.Unicode.GetBytes(_stringValue)); // Add to the packet/datastream the string itself
         }
 
@@ -187,6 +190,9 @@ namespace TCPChatServer {
             if (buffer.Count > readPointer) {
 
                 int intRead = BitConverter.ToInt32(byteArray, readPointer);
+
+                Console.WriteLine(intRead.ToString() + " from: " + (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod());
+
                 if (moveDataPointer)
                     readPointer += 4;   // Increase pointer by 4 because an int is 32 bits = 4 bytes
 
@@ -205,8 +211,6 @@ namespace TCPChatServer {
             if (buffer.Count > readPointer) {
 
                 int stringSize = PacketReadInt(true);
-
-                Console.Write(buffer.Count);
 
                 string stringRead = Encoding.Unicode.GetString(byteArray, readPointer, stringSize);
                 if (moveDataPointer)
