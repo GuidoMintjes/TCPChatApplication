@@ -41,7 +41,7 @@ namespace TCPChatServer {
             }
 
 
-            Funcs.printMessage(2, "Packet sent to all", false);
+            //Funcs.printMessage(2, "Packet sent to all", false);
         }
 
 

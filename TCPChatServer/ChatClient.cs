@@ -88,6 +88,9 @@ namespace TCPChatServer {
                                                                 // in the data 'stream'
 
                     if (dataLength <= 0) {
+
+                        ChatServer.connections[id].Disconnect();    // Properly disconnects from the server
+
                         return;             // Return out of the method when no bytes have been read ==>
                                             // (amount of bytes read = 0)
                     }
@@ -106,6 +109,7 @@ namespace TCPChatServer {
                 } catch (Exception exc) {
 
                     Console.WriteLine("Disconnected due to error: " + exc.Message);
+                    ChatServer.connections[id].Disconnect();    // Properly disconnects from the server
                 }
             }
 
@@ -147,7 +151,7 @@ namespace TCPChatServer {
                             ChatServer.packetHandlers[packetID](id, packet);
 
 
-                            Funcs.printMessage(2, "Added to packet handlers", true);
+                            //Funcs.printMessage(2, "Added to packet handlers", true);
                         }
                     });
 
@@ -174,6 +178,24 @@ namespace TCPChatServer {
                 return false;       // In this case there is still a piece of data in the packet/stream which is part of some data
                                     // in some other upcoming packet, which is why it shouldn't be destroyed
             }
+
+
+            public void Disconnect() {
+
+                socket.Close();
+                stream = null;
+                receiveByteArray = null;
+                receivedPacket = null;
+                socket = null;
+            }
+        }
+
+
+        public void Disconnect() {
+
+            Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected from the server!");
+
+            tcp.Disconnect();
         }
     }
 }

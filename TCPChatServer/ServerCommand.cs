@@ -38,7 +38,7 @@ namespace TCPChatServer {
 
             if (!String.IsNullOrEmpty(commandRaw)) {
 
-                    string[] commandsRaw = commandRaw.Split(" ");
+                    string[] commandsRaw = commandRaw.Split(" ", 2);
 
                 try {
                     command = commandsRaw[0];

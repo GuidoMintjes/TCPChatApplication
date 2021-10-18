@@ -28,8 +28,9 @@ namespace TCPChatServer {
         public static void PassChatMessage(int clientID, Packet packet) {
 
             string message = packet.PacketReadString(true);
+            Funcs.printMessage(4, message, false);
 
-            TCPServerSend.TCPSendPacketToAll(clientID, packet);
+            TCPServerSend.TCPSendPacketToAll(packet);
         }
     }
 }
