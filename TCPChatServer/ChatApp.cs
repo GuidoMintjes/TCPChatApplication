@@ -8,6 +8,8 @@ namespace TCPChatServer {
 
         private static bool isRunning = false;
 
+        public static int countIntSend = 0;
+
         static void Main(string[] args) {
 
             Console.Write(@"                            Welcome to the server program!

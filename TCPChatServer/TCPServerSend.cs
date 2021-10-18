@@ -14,6 +14,10 @@ namespace TCPChatServer {
             packet.PacketWrite(welcomeMessage);                         // Add the welcome message to the packet
             packet.PacketWrite(clientID);                               // Add the client ID to the packet
 
+            Console.WriteLine();
+            Console.WriteLine("Sending clientID: " + clientID);
+            Console.WriteLine();
+
             TCPSendPacket(clientID, packet);
         }
 

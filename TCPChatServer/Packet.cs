@@ -107,6 +107,9 @@ namespace TCPChatServer {
 
         // Write the length of the packet into the packet, this is need for properly receiving it
         public void PacketWriteLength() {
+
+            Console.WriteLine("Inserted packet length to first position.");
+
             buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count));
         }
 
@@ -127,6 +130,12 @@ namespace TCPChatServer {
         /// </summary>
         /// <param name="_intValue"> The actual integer value that is added to the packet (4 bytes) </param>
         public void PacketWrite(int _intValue) {
+
+            ChatApp.countIntSend++;
+
+            Console.WriteLine(_intValue.ToString() + " sent as no. " + ChatApp.countIntSend + 
+                " from: " + (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod());
+
             buffer.AddRange(BitConverter.GetBytes(_intValue));
         }
 
@@ -137,7 +146,6 @@ namespace TCPChatServer {
             int a = Encoding.Unicode.GetByteCount(_stringValue);   // A string isn't always the same size, which is why the length of the string
                                                                    // has to be added to the datastream, so the other end knows how long to read
                                                                    // keep reading for just the string, an integer is always 4 bytes
-            PacketWrite(a);
             PacketWrite(a);
             
             buffer.AddRange(Encoding.Unicode.GetBytes(_stringValue)); // Add to the packet/datastream the string itself
