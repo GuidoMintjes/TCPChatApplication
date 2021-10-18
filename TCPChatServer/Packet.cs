@@ -108,7 +108,7 @@ namespace TCPChatServer {
         // Write the length of the packet into the packet, this is need for properly receiving it
         public void PacketWriteLength() {
 
-            Console.WriteLine("Inserted packet length to first position.");
+            //Console.WriteLine("Inserted packet length to first position.");
 
             buffer.InsertRange(0, BitConverter.GetBytes(buffer.Count));
         }
@@ -133,8 +133,8 @@ namespace TCPChatServer {
 
             ChatApp.countIntSend++;
 
-            Console.WriteLine(_intValue.ToString() + " sent as no. " + ChatApp.countIntSend + 
-                " from: " + (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod());
+            //Console.WriteLine(_intValue.ToString() + " sent as no. " + ChatApp.countIntSend + 
+                //" from: " + (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod());
 
             buffer.AddRange(BitConverter.GetBytes(_intValue));
         }
@@ -199,7 +199,7 @@ namespace TCPChatServer {
 
                 int intRead = BitConverter.ToInt32(byteArray, readPointer);
 
-                Console.WriteLine(intRead.ToString() + " from: " + (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod());
+                //Console.WriteLine(intRead.ToString() + " from: " + (new System.Diagnostics.StackTrace()).GetFrame(1).GetMethod());
 
                 if (moveDataPointer)
                     readPointer += 4;   // Increase pointer by 4 because an int is 32 bits = 4 bytes
