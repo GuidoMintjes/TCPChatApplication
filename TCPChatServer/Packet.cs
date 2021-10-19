@@ -8,7 +8,10 @@ namespace TCPChatServer {
     public enum ServerPackets {
         welcome = 1,
         message = 2,
-        chat = 3
+        chat = 3,
+        names = 4,
+        connected = 5,
+        disconnected = 6
     }
 
 
@@ -16,7 +19,10 @@ namespace TCPChatServer {
     public enum ClientPackets {
         welcomeReceived = 1,
         messageReceived = 2,
-        chatReceived = 3
+        chatReceived = 3,
+        namesReceived = 4,
+        connectedReceived = 5,
+        disconnectedReceived = 6
     }
 
 

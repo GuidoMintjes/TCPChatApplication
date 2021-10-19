@@ -14,6 +14,9 @@ namespace TCPChatServer {
         public TCP tcp;
 
 
+        public string userName;         // Username of the client connected to the server that uses this instance
+
+
         public ChatClient(int _clientID) {
 
             clientID = _clientID;
@@ -195,6 +198,9 @@ namespace TCPChatServer {
 
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected from the server!");
 
+            TCPServerSend.SendDisconnectedMessageToAll(userName, clientID);
+
+            userName = null;
             tcp.Disconnect();
         }
     }

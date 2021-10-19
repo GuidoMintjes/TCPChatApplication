@@ -55,5 +55,14 @@ namespace TCPChatServer {
                     ChatServer.connections[i].tcp.SendData(packet);
             }
         }
+
+
+        public static void SendDisconnectedMessageToAll(string username, int excludedID) {
+
+            Packet packet = new Packet(6);
+            packet.PacketWrite(username);
+
+            TCPSendPacketToAll(excludedID, packet);
+        }
     }
 }

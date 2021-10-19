@@ -13,14 +13,30 @@ namespace TCPChatServer {
 
             Funcs.printMessage(3, $"{ChatServer.connections[clientID].tcp.socket.Client.RemoteEndPoint} connected to this server!"
                 + $" (ID {clientID} with name {receivedUserName})", true);
-            
-            
+
+
+            ChatServer.connections[clientID].userName = receivedUserName;   // Saves the username for this client
+
+
+            // Notify other chatters of person being connected
+
+            Packet connectionPacket = new Packet(5);
+            connectionPacket.PacketWrite(receivedUserName);
+
+            TCPServerSend.TCPSendPacketToAll(clientID, connectionPacket);
+
+
 
             if(clientID != receivedClientID) {
 
                 Console.WriteLine();
                 Funcs.printMessage(0, $"Client {receivedUserName} with ID {clientID} has the wrong ID: {receivedClientID}!", false);
                 Console.WriteLine();
+
+                ChatServer.connections[clientID].Disconnect();
+            } else {
+
+                Packet namePacket = new Packet();
             }
         }
 
