@@ -70,36 +70,31 @@ namespace TCPChatServer {
 
             Packet namePacket = new Packet( (int) ServerPackets.names);
             
-            int names = 0;
+            int nameCount = 0;
 
             for (int i = 1; i <= ChatServer.connections.Count; i++) {
 
                 if (ChatServer.connections[i].userName != null)
-                    names++;
+                    nameCount++;
             }
 
-            namePacket.PacketWrite(names);
+            namePacket.PacketWrite(nameCount);
 
 
             for (int i = 1; i <= ChatServer.connections.Count; i++) {
 
                 if (i != clientID) {
 
-                    if (ChatServer.connections[i].userName != null)
-                        namePacket.PacketWrite(ChatServer.connections[i].userName);
+                    if (ChatServer.connections[i].userName != null) {
+
+                        Console.WriteLine(ChatServer.connections[i].userName.ToString());
+                        namePacket.PacketWrite(ChatServer.connections[i].userName.ToString());
+                    }
                 }
             }
 
-            namePacket.PacketWriteLength();
 
-
-            foreach (byte byt in namePacket.GetPacketBytes()) {
-
-                Console.Write(byt + " ");
-            }
-            Console.WriteLine();
-
-            ChatServer.connections[clientID].tcp.SendData(namePacket);
+            TCPSendPacket(clientID, namePacket);
         }
     }
 }
