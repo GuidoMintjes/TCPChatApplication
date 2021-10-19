@@ -99,6 +99,7 @@ namespace TCPChatServer {
 
                         namePacket.PacketWrite(ChatServer.connections[i].userName.ToString());
 
+                        /*
                         foreach (byte byt in namePacket.GetPacketBytes()) {
 
                             Console.Write(byt + " ");
@@ -107,6 +108,7 @@ namespace TCPChatServer {
 
                         //namePacket.PacketReadInt(true);
                         Console.WriteLine(namePacket.PacketReadString(true));
+                        */
                     }
                 }
             }
