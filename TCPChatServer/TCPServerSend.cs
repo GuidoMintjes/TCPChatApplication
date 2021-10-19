@@ -26,6 +26,16 @@ namespace TCPChatServer {
         private static void TCPSendPacket(int clientID, Packet packet) {
 
             packet.PacketWriteLength();
+            
+            /*
+            Console.WriteLine("Sending: ");
+            foreach (byte byt in packet.GetPacketBytes()) {
+
+                Console.Write(byt + " ");
+            }
+            Console.WriteLine();
+            */
+
             ChatServer.connections[clientID].tcp.SendData(packet);
         }
 
@@ -87,8 +97,16 @@ namespace TCPChatServer {
 
                     if (ChatServer.connections[i].userName != null) {
 
-                        Console.WriteLine(ChatServer.connections[i].userName.ToString());
                         namePacket.PacketWrite(ChatServer.connections[i].userName.ToString());
+
+                        foreach (byte byt in namePacket.GetPacketBytes()) {
+
+                            Console.Write(byt + " ");
+                        }
+                        Console.WriteLine();
+
+                        //namePacket.PacketReadInt(true);
+                        Console.WriteLine(namePacket.PacketReadString(true));
                     }
                 }
             }
