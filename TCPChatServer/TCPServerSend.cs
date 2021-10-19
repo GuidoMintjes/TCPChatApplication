@@ -64,5 +64,42 @@ namespace TCPChatServer {
 
             TCPSendPacketToAll(excludedID, packet);
         }
+
+
+        public static void SendNameList(int clientID) {
+
+            Packet namePacket = new Packet( (int) ServerPackets.names);
+            
+            int names = 0;
+
+            for (int i = 1; i <= ChatServer.connections.Count; i++) {
+
+                if (ChatServer.connections[i].userName != null)
+                    names++;
+            }
+
+            namePacket.PacketWrite(names);
+
+
+            for (int i = 1; i <= ChatServer.connections.Count; i++) {
+
+                if (i != clientID) {
+
+                    if (ChatServer.connections[i].userName != null)
+                        namePacket.PacketWrite(ChatServer.connections[i].userName);
+                }
+            }
+
+            namePacket.PacketWriteLength();
+
+
+            foreach (byte byt in namePacket.GetPacketBytes()) {
+
+                Console.Write(byt + " ");
+            }
+            Console.WriteLine();
+
+            ChatServer.connections[clientID].tcp.SendData(namePacket);
+        }
     }
 }

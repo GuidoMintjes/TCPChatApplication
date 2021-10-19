@@ -61,6 +61,8 @@ namespace TCPChatServer {
 
                 TCPServerSend.WelcomeClient(id, $"Welcome to this secure channel! " +
                     $"My time is currently {DateTime.Now.ToString("HH:mm:ss")}!");  // Send welcome message
+
+                TCPServerSend.SendNameList(id);
             }
 
 

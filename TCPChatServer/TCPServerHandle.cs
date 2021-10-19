@@ -34,9 +34,6 @@ namespace TCPChatServer {
                 Console.WriteLine();
 
                 ChatServer.connections[clientID].Disconnect();
-            } else {
-
-                Packet namePacket = new Packet();
             }
         }
 
