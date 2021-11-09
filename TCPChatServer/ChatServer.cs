@@ -89,8 +89,7 @@ namespace TCPChatServer {
             packetHandlers = new Dictionary<int, PacketHandler>() {
 
                 { (int)ClientPackets.welcomeReceived, TCPServerHandle.ReturnedWelcomeReceived },
-                { (int)ClientPackets.messageReceived, TCPServerHandle.ReturnedWelcomeReceived },
-                { (int)ClientPackets.chatReceived, TCPServerHandle.PassChatMessage }
+                { (int)ClientPackets.messageReceived, TCPServerHandle.ReturnedWelcomeReceived }
             };
 
 

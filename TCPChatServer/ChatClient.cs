@@ -59,10 +59,7 @@ namespace TCPChatServer {
                 stream.BeginRead(receiveByteArray, 0, dataBufferSize, StreamReceiveCallback, null);
 
 
-                TCPServerSend.WelcomeClient(id, $"Welcome to this secure channel! " +
-                    $"My time is currently {DateTime.Now.ToString("HH:mm:ss")}!");  // Send welcome message
-
-                TCPServerSend.SendNameList(id);
+                TCPServerSend.WelcomeClient(id, $"Welcome to the server!");  // Send welcome message
             }
 
 
@@ -199,8 +196,6 @@ namespace TCPChatServer {
         public void Disconnect() {
 
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected from the server!");
-
-            TCPServerSend.SendDisconnectedMessageToAll(userName, clientID);
 
             userName = null;
             tcp.Disconnect();

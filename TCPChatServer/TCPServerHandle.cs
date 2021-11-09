@@ -36,14 +36,5 @@ namespace TCPChatServer {
                 ChatServer.connections[clientID].Disconnect();
             }
         }
-
-
-        public static void PassChatMessage(int clientID, Packet packet) {
-
-            string message = packet.PacketReadString(true);
-            Funcs.printMessage(4, message, false);
-
-            TCPServerSend.TCPSendPacketToAll(packet);
-        }
     }
 }
