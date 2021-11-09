@@ -9,7 +9,7 @@ namespace TCPChatServer {
         // Send a nice welcoming message to a client that just connected
         public static void WelcomeClient(int toClientID, string welcomeMessage) {
 
-            Packet packet = new Packet((int)ServerPackets.welcome);     // Create a welcoming packet with the welcome enum
+            Packet packet = new Packet((int) ServerPackets.welcome);     // Create a welcoming packet with the welcome enum
 
             packet.PacketWrite(welcomeMessage);                         // Add the welcome message to the packet
             packet.PacketWrite(toClientID);                               // Add the client ID to the packet
