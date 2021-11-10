@@ -20,10 +20,10 @@ namespace TCPChatServer {
 
             // Notify other chatters of person being connected
 
-            Packet connectionPacket = new Packet(5);
-            connectionPacket.PacketWrite(receivedUserName);
+            //Packet connectionPacket = new Packet(5);
+            //connectionPacket.PacketWrite(receivedUserName);
 
-            TCPServerSend.TCPSendPacketToAll(clientID, connectionPacket);
+            //TCPServerSend.TCPSendPacketToAll(clientID, connectionPacket);
 
 
 

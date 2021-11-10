@@ -51,6 +51,8 @@ namespace TCPChatServer {
         // Handle connection once it has been established
         private static void ServerConnectCallback(IAsyncResult aResult) {
 
+            Console.WriteLine("Connection incoming!");
+
             // Store the tcp client instance in a local variable here
             TcpClient client = tcpListener.EndAcceptTcpClient(aResult);
             tcpListener.BeginAcceptTcpClient(new AsyncCallback(ServerConnectCallback), null);   // We have to call this function

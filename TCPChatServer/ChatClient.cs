@@ -193,6 +193,14 @@ namespace TCPChatServer {
         }
 
 
+        public class UDP {
+
+            public IPEndPoint endPoint;
+
+            public int clientID;
+        }
+
+
         public void Disconnect() {
 
             Console.WriteLine($"{tcp.socket.Client.RemoteEndPoint} has disconnected from the server!");
