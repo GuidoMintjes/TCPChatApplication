@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading;
 
-namespace TCPChatServer {
+namespace GameServer {
     public static class ServerCommand {
 
         public static bool reading = false;
@@ -38,7 +38,7 @@ namespace TCPChatServer {
 
             if (!String.IsNullOrEmpty(commandRaw)) {
 
-                    string[] commandsRaw = commandRaw.Split(" ", 2);
+                string[] commandsRaw = commandRaw.Split(" ", 2);
 
                 try {
                     command = commandsRaw[0];
@@ -47,36 +47,19 @@ namespace TCPChatServer {
                     Funcs.printMessage(1, "Command not formatted right!", false);
                 }
 
-                    switch (command) {
+                switch (command) {
+                    
+                    default:
 
-                        case "say":
+                        Funcs.printMessage(1, "Command not formatted right!", false);
+                        CommandLoop();
+                        break;
+                }
 
-                            TCPServerSend.TCPSendPacketToAll(CreateMessagePacket(argument));
-                            break;
+                reading = false;
 
-
-                        default:
-
-                            CommandLoop();
-                            break;
-                    }
-
-                    reading = false;
-
-                    CommandLoop();
+                CommandLoop();
             }
-        }
-
-
-
-
-        private static Packet CreateMessagePacket(string message) {
-
-            Packet packet = new Packet((int)ServerPackets.message);
-
-            packet.PacketWrite(message);
-
-            return packet;
         }
     }
 }

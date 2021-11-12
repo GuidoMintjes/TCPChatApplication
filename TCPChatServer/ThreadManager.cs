@@ -2,7 +2,7 @@
 using System.Timers;
 using System.Collections.Generic;
 
-namespace TCPChatServer {
+namespace GameServer {
     class ThreadManager {
 
 
@@ -12,6 +12,7 @@ namespace TCPChatServer {
         private static readonly List<Action> executeOnMainThread = new List<Action>();
         private static readonly List<Action> executeCopiedOnMainThread = new List<Action>();
         private static bool actionToExecuteOnMainThread = false;
+
 
         private static double frameTime = 1000 / 60;
 

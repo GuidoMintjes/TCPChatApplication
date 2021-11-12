@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace TCPChatServer {
+namespace GameServer {
     public static class Funcs {
 
         private static string errorAlert = "[ERROR] ";
@@ -139,6 +139,20 @@ namespace TCPChatServer {
                 System.Threading.Thread.Sleep(delay);
             }
             Console.Write("\n");
+        }
+
+
+
+        public static void PrintData(byte[] data) {
+
+            string debugger = "Received packet: ";
+
+            foreach (byte byt in data) {
+
+                debugger += byt.ToString() + " ";
+            }
+
+            printMessage(2, debugger, false);
         }
     }
 }

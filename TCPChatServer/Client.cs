@@ -4,23 +4,30 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Numerics;
 
-namespace TCPChatServer {
+namespace GameServer {
 
-    public class ChatClient {
+    public class Client {
 
         public readonly static int dataBufferSize = 4096;    // Set the (default) buffer size to 4 megabytes
+
         public int clientID;
+
+        public Player player;
         public TCP tcp;
+        public UDP udp;
 
 
         public string userName;         // Username of the client connected to the server that uses this instance
 
 
-        public ChatClient(int _clientID) {
+        public Client(int _clientID) {
 
             clientID = _clientID;
+
             tcp = new TCP(clientID);
+            udp = new UDP(clientID);
         }
 
 
@@ -59,7 +66,7 @@ namespace TCPChatServer {
                 stream.BeginRead(receiveByteArray, 0, dataBufferSize, StreamReceiveCallback, null);
 
 
-                TCPServerSend.WelcomeClient(id, $"Welcome to the server!");  // Send welcome message
+                ServerSend.WelcomeClient(id, $"Welcome to the server!");  // Send welcome message
             }
 
 
@@ -91,7 +98,7 @@ namespace TCPChatServer {
 
                     if (dataLength <= 0) {
 
-                        ChatServer.connections[id].Disconnect();    // Properly disconnects from the server
+                        //ChatServer.connections[id].Disconnect();    // Properly disconnects from the server
 
                         return;             // Return out of the method when no bytes have been read ==>
                                             // (amount of bytes read = 0)
@@ -111,7 +118,7 @@ namespace TCPChatServer {
                 } catch (Exception exc) {
 
                     Console.WriteLine("Disconnected due to error: " + exc.Message);
-                    ChatServer.connections[id].Disconnect();    // Properly disconnects from the server
+                    //ChatServer.connections[id].Disconnect();    // Properly disconnects from the server
                 }
             }
 
@@ -198,6 +205,67 @@ namespace TCPChatServer {
             public IPEndPoint endPoint;
 
             public int clientID;
+
+
+            public UDP(int _clientID) {
+
+                clientID = _clientID;
+            }
+
+
+            public void Connect(IPEndPoint _endPoint) {
+
+                endPoint = _endPoint;
+
+                Funcs.printMessage(3, "UDP client connected!", false);
+                //ServerSend.UDPTest(clientID);
+            }
+
+            public void SendData(Packet packet) {
+
+                ChatServer.SendUDPData(endPoint, packet);
+            }
+
+
+            public void HandleData(Packet packet) {
+
+                int packetLength = packet.PacketReadInt(true);
+                byte[] packetData = packet.GetPacketBytes();
+
+                ThreadManager.ExecuteOnMainThread(() => {
+
+                    using (Packet packet = new Packet(packetData)) {
+
+                        int packetID = packet.PacketReadInt(true);
+                        ChatServer.packetHandlers[packetID](clientID, packet);
+                    }
+                });
+            }
+        }
+
+
+        public void SendIntoGame(string _clientName) {
+
+            player = new Player(clientID, userName, new Vector3(0f, 0f, 0f));
+
+            foreach (Client _client in ChatServer.connections.Values) {
+
+                if(_client.player != null) {
+
+                    if(_client.clientID != clientID) {
+
+                        ServerSend.SpawnPlayer(clientID, _client.player);
+                    }
+                }
+            }
+
+            foreach (Client _client in ChatServer.connections.Values) {
+
+                if(_client.player != null) {
+
+                    ServerSend.SpawnPlayer(_client.clientID, player);
+                }
+            }
         }
 
 

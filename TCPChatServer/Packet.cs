@@ -2,23 +2,21 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TCPChatServer {
+namespace GameServer {
 
     // Packet sent from server to client, in this case only a welcome message
     public enum ServerPackets {
         welcome = 1,
-        message = 2,
-        connected = 3,
-        disconnected = 4
+        spawnPlayer = 2,
+        PlayerPosition = 3,
+        PlayerRotation = 4
     }
 
 
     // Packet sent from client to server, in this case confirming the welcome message
     public enum ClientPackets {
         welcomeReceived = 1,
-        messageReceived = 2,
-        connectedReceived = 3,
-        disconnectedReceived = 4
+        playerMovement = 2
     }
 
 

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using TCPChatServer;
+using GameServer;
 using System.Threading;
 
-namespace TCPChatServer {
+namespace GameServer {
     class ChatApp {
 
         private static bool isRunning = false;

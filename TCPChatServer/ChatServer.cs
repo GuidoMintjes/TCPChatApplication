@@ -3,7 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Collections.Generic;
 
-namespace TCPChatServer {
+namespace GameServer {
 
     class ChatServer {
 
@@ -16,10 +16,11 @@ namespace TCPChatServer {
 
         private static TcpListener tcpListener;     // A listener is an object which 'listens' for incoming connections,
                                                     // this is needed because in the tcp protocol you establish a connection
+        private static UdpClient udpListener;
 
 
         // Keep a dictionary of all connections
-        public static Dictionary<int, ChatClient> connections = new Dictionary<int, ChatClient>();
+        public static Dictionary<int, Client> connections = new Dictionary<int, Client>();
 
 
         // Same dictionary and void as the client
@@ -40,7 +41,13 @@ namespace TCPChatServer {
             // callback function is called when a connection is established
             tcpListener = new TcpListener(IPAddress.Any, Port);
             tcpListener.Start();
-            tcpListener.BeginAcceptTcpClient(new AsyncCallback(ServerConnectCallback), null);
+            tcpListener.BeginAcceptTcpClient(new AsyncCallback(TCPConnectCallback), null);
+
+
+            // Initialize the UDP part of the networking shenanigans
+            udpListener = new UdpClient(Port);
+            udpListener.BeginReceive(UDPReceiveCallback, null);
+
 
             Funcs.printMessage(2, "Server initialized on port: " + Port, true);
 
@@ -49,13 +56,13 @@ namespace TCPChatServer {
 
 
         // Handle connection once it has been established
-        private static void ServerConnectCallback(IAsyncResult aResult) {
+        private static void TCPConnectCallback(IAsyncResult aResult) {
 
             Console.WriteLine("Connection incoming!");
 
             // Store the tcp client instance in a local variable here
             TcpClient client = tcpListener.EndAcceptTcpClient(aResult);
-            tcpListener.BeginAcceptTcpClient(new AsyncCallback(ServerConnectCallback), null);   // We have to call this function
+            tcpListener.BeginAcceptTcpClient(new AsyncCallback(TCPConnectCallback), null);   // We have to call this function
                                                                                                 // again, otherwise the tcplistener would stop
                                                                                                 // listening and no other connections could be made
 
@@ -78,20 +85,90 @@ namespace TCPChatServer {
         }
 
 
+        private static void UDPReceiveCallback(IAsyncResult Aresult) {
+
+            try {
+
+                //Funcs.printMessage(2, "Received some data through udp!", false);
+
+                IPEndPoint clientEndPoint = new IPEndPoint(IPAddress.Any, 0);
+                byte[] dataReceived = udpListener.EndReceive(Aresult, ref clientEndPoint);
+
+
+                udpListener.BeginReceive(UDPReceiveCallback, null);
+
+
+                if(dataReceived.Length < 4) {
+
+                    Console.WriteLine("Data from client is not big enough!!");
+                    return;
+                }
+
+
+                using (Packet packet = new Packet(dataReceived)) {
+
+                    int clientID = packet.PacketReadInt(true);
+
+                    // If clientID received == 0 something went wrong so return!
+                    if (clientID == 0) {
+                        Console.WriteLine("Dit mag niet gebeuren! (ChatServer.cs)");
+                        return;
+                    }
+
+                    // If the endpoint is messed up also return!
+                    if(connections[clientID].udp.endPoint == null) {
+
+                        connections[clientID].udp.Connect(clientEndPoint);
+                        return;
+                    }
+
+
+                    // ID CHECK! Otherwise nasty hackers may hack your player away from yer treasure! ARGHHH
+                    if(connections[clientID].udp.endPoint.ToString() == clientEndPoint.ToString()) {
+
+                        connections[clientID].udp.HandleData(packet);
+                    }
+                }
+
+            } catch (Exception ex) {
+
+                Console.WriteLine($"Error receiving through UDP: {ex}");
+            }
+        }
+
+
+        public static void SendUDPData(IPEndPoint clientEndPoint, Packet packet) {
+
+            try {
+
+                if(clientEndPoint != null) {
+
+                    //Funcs.PrintData(packet.GetPacketBytes());
+
+                    //Console.WriteLine("Sending through udp...");
+
+                    udpListener.BeginSend(packet.GetPacketBytes(), packet.GetPacketSize(), clientEndPoint, null, null);
+                }
+            } catch (Exception ex) {
+
+                Console.WriteLine($"Error sending through UDP: {ex}");
+            }
+        }
+
+
         // Initialise our connections dictionary
         private static void InitializeServerData(int maxConnections) {
 
             for (int i = 1; i <= maxConnections; i++) {
 
-                connections.Add(i, new ChatClient(i));
+                connections.Add(i, new Client(i));
             }
 
 
             // Initialize the dictionary of packet handlers
             packetHandlers = new Dictionary<int, PacketHandler>() {
 
-                { (int)ClientPackets.welcomeReceived, TCPServerHandle.ReturnedWelcomeReceived },
-                { (int)ClientPackets.messageReceived, TCPServerHandle.ReturnedWelcomeReceived }
+                { (int)ClientPackets.welcomeReceived, ServerHandle.ReturnedWelcomeReceived }
             };
 
 

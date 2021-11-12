@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TCPChatServer {
-    class TCPServerHandle {
+namespace GameServer {
+    class ServerHandle {
         
 
         public static void ReturnedWelcomeReceived(int clientID, Packet packet) {
@@ -18,14 +18,6 @@ namespace TCPChatServer {
             ChatServer.connections[clientID].userName = receivedUserName;   // Saves the username for this client
 
 
-            // Notify other chatters of person being connected
-
-            //Packet connectionPacket = new Packet(5);
-            //connectionPacket.PacketWrite(receivedUserName);
-
-            //TCPServerSend.TCPSendPacketToAll(clientID, connectionPacket);
-
-
 
             if(clientID != receivedClientID) {
 
@@ -33,8 +25,14 @@ namespace TCPChatServer {
                 Funcs.printMessage(0, $"Client {receivedUserName} with ID {clientID} has the wrong ID: {receivedClientID}!", false);
                 Console.WriteLine();
 
-                ChatServer.connections[clientID].Disconnect();
+                //ChatServer.connections[clientID].Disconnect();
             }
+        }
+
+
+        public static void UDPTestConfirmed(int clientID, Packet packet) {
+
+            Funcs.printMessage(2, $"Received udp confirmation: {packet.PacketReadString(true)}", false);
         }
     }
 }
